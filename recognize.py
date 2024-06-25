@@ -1,36 +1,27 @@
 import cv2
-import os
 
-video=cv2.VideoCapture(0)
+def open_camera():
+    # Open the camera
+    cap = cv2.VideoCapture(0)  # Use 0 for the default camera (or webcam)
 
-facedetect=cv2.CascadeClassifier('D:\Face Recognition System\data collect\haarcascade_frontalface_default.xml')
+    if not cap.isOpened():
+        print("Error: Could not open camera.")
+        return
 
-# count=0
+    while True:
+        # Capture frame-by-frame
+        ret, frame = cap.read()
 
-# nameID=str(input("Enter Your Name: ")).lower()
+        # Display the resulting frame
+        cv2.imshow('Camera', frame)
 
-# path='images/'+nameID
+        # Exit loop if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-# isExist = os.path.exists(path)
+    # Release the camera and close all OpenCV windows
+    cap.release()
+    cv2.destroyAllWindows()
 
-# if isExist:
-# 	print("Name Already Taken")
-# 	nameID=str(input("Enter Your Name Again: "))
-# else:
-# 	os.makedirs(path)
-
-while True:
-	ret,frame=video.read()
-	faces=facedetect.detectMultiScale(frame,1.3, 5)
-	for x,y,w,h in faces:
-		# count=count+1
-		# name='./images/'+nameID+'/'+ str(count) + '.jpg'
-		# print("Creating Images........." +name)
-		# cv2.imwrite(name, frame[y:y+h,x:x+w])
-		cv2.rectangle(frame, (x,y), (x+w, y+h), (0,255,0), 3)
-	cv2.imshow("WindowFrame", frame)
-	k=cv2.waitKey(1)
-	if k==ord('q'):
-		break
-video.release()
-cv2.destroyAllWindows()
+if __name__ == "__main__":
+    open_camera()
